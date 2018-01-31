@@ -8,9 +8,11 @@
 #include "ctpif.h"
 #include "ctpmdspi.h"
 #include "ctptdspi.h"
+#include "mem.h"
 #include "rapidjson/document.h"
 #include "str.h"
 #include "utility.h"
+#include "ctpif_data_fio.h"
 
 
 #ifdef _WINDOWS
@@ -37,6 +39,14 @@ static std::thread thCtpmd;
 static std::thread thCtptd;
 static bool run = false;
 
+static CtpDataWriter* writer = nullptr;
+
+static int write_ctpdata_to_memory(CtpMarketData *data)
+{
+    writer->addNewTick(data);
+    return 0;
+}
+
 
 static void connect_to_tdif() {
   // connect to trade insterface and get something then break
@@ -44,8 +54,8 @@ static void connect_to_tdif() {
   thCtptd = std::thread{connect_to_ctp_tdif, gtdspi};
   std::this_thread::sleep_for(std::chrono::seconds(10));
   gtdspi->login();
-  // std::this_thread::sleep_for(std::chrono::seconds(10));
-  // gtdspi->prepare_environment();
+  std::this_thread::sleep_for(std::chrono::seconds(10));
+  gtdspi->prepare_environment();
 
   for (;run;)
     std::this_thread::sleep_for(std::chrono::seconds(10));
@@ -59,7 +69,7 @@ static void connect_to_tdif() {
 
 static int subscribe_data() {
   gmdspi = new CtpMdSpi(gmd_param);
-  // gmdspi->set_market_data_cb(write_ctpdata_to_memory);
+  gmdspi->set_market_data_cb(write_ctpdata_to_memory);
   thCtpmd = std::thread{connect_to_ctp_mdif, gmdspi};
   std::this_thread::sleep_for(std::chrono::seconds(10));
   gmdspi->user_login();
@@ -99,7 +109,7 @@ int main(int argc, char *argv[]) {
 #ifdef _DEBUG_
   _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
   _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
-  // _CrtDumpMemoryLeaks();
+  _CrtDumpMemoryLeaks();
 #endif //_DEBUG_
 #endif //_WINDOWS
 
@@ -119,11 +129,10 @@ int main(int argc, char *argv[]) {
   }
 
   signal(SIGINT, got_signal);
+  writer = new CtpDataWriter(gmd_param);
 
   run = true;
   std::thread thread_tdif(connect_to_tdif);
-
-  std::this_thread::sleep_for(std::chrono::seconds(10));
 
   if (subscribe_data()) {
     cout << "error for subscrie data\n";
@@ -148,6 +157,12 @@ int main(int argc, char *argv[]) {
   std::this_thread::sleep_for(std::chrono::seconds(120));
 
   close_mdif();
+
+  writer->close_interface();
+  std::this_thread::sleep_for(std::chrono::seconds(30));
+  SafeDeletePtr(writer);
+
+  // delete gtdspi;
 
   run = false;
   thread_tdif.join();

@@ -1,0 +1,42 @@
+{
+  "data-interface": [
+    {
+      "name": "ctp",
+      "param": {
+        "ctpmd-logpath": "/work/sean/projects/build/md/log",
+        "brokerid": "9999",
+        "clientid": "068576",
+        "password": "simnow",
+        "udp": false,
+        "mduri": [
+          "tcp://180.168.146.187:10010",
+          "tcp://180.168.146.187:10011",
+          "tcp://218.202.237.33:10012"
+        ],
+        "tduri": [
+          "tcp://180.168.146.187:10000",
+          "tcp://180.168.146.187:10001",
+          "tcp://218.202.237.33:10002"
+        ],
+        "shared_mem_name": "CtpSharedMemory"
+      }
+    }
+  ],
+  "instrument": {
+    "file": "/work/sean/projects/md/md/instruments.json"
+  },
+  "gmd-param": {
+    "max-tick-per-sec": 5,
+    "tick-buffer-num": 2,
+    "save-tickbuf-time": 20,
+    "max-time-long": 12,
+    "log-path": "/work/sean/projects/build/md/log/gmd.log",
+    "tdlog-path": "/work/sean/projects/build/md/log/gtd.log",
+    "data-store-path": "/work/sean/projects/build/md/data/store",
+    "tick-data-path": "/work/sean/projects/build/md/data/tick",
+    "data-realtime-path": "/work/sean/projects/build/md/data/rt",
+    "cal-store-path": "/work/sean/projects/build/md/data/cal",
+    "save-loop-interval": 10,
+    "exit-time": "16:00:00"
+  }
+}

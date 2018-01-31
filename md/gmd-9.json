@@ -1,16 +1,44 @@
 {
-  "array": [
-    1,
-    2,
-    3
+  "data-interface": [
+    {
+      "name": "ctp",
+      "param": {
+        "ctpmd-logpath": "/data/quants/ctp9/log",
+        "brokerid": "0118",
+        "clientid": "1007696",
+        "password": "248410",
+        "udp": false,
+        "mduri": [
+          "tcp://210.22.104.65:41213",
+          "tcp://210.22.104.66:41213",
+          "tcp://101.230.208.240:41213",
+          "tcp://101.230.208.241:41213"
+        ],
+        "tduri": [
+          "tcp://210.22.104.65:41205",
+          "tcp://210.22.104.66:41205",
+          "tcp://101.230.208.240:41205",
+          "tcp://101.230.208.241:41205"
+        ],
+        "shared_mem_name": "CtpSharedMemory"
+      }
+    }
   ],
-  "boolean": true,
-  "null": null,
-  "number": 123,
-  "object": {
-    "a": "b",
-    "c": "d",
-    "e": "f"
+  "instrument": {
+    "file": "/data/quants/ctp9/conf/inst.json"
   },
-  "string": "Hello World"
+  "gmd-param": {
+    "max-tick-per-sec": 5,
+    "tick-buffer-num": 2,
+    "save-tickbuf-time": 20,
+    "max-time-long": 12,
+    "log-path": "/data/quants/ctp9/log/gmd.log",
+    "tdlog-path": "/data/quants/ctp9/log/gtd.log",
+    "data-store-path": "/data/quants/ctp9/data/store",
+    "tick-data-path": "/data/quants/ctp9/data/tick",
+    "data-realtime-path": "/data/quants/ctp9/data/rt",
+    "cal-store-path": "/data/quants/ctp9/data/cal",
+    "save-loop-interval": 10,
+    "exit-time": "16:00:00"
+  }
 }

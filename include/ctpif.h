@@ -48,13 +48,8 @@ extern CTPIF_API CtpTradeSpi* get_ctp_tdif(GmdParam *param, const char *logpath)
 
 extern CTPIF_API void connect_to_ctp_mdif(CtpMdSpi* mdspi);
 
+extern CTPIF_API void output_inst_summary(ostream& out, const MapInstrument& map_inst);
 
-
-extern CTPIF_API CtpSpeedTest* initSpeedParameter(const char *filepath);
-/**
- * @brief releaseCtpMdIf Release the Ctp Interface for market data
- */
-extern CTPIF_API void releaseSpeedParameter(CtpSpeedTest* param);
 
 
 #endif // CTPIF_H

@@ -15,7 +15,8 @@ SOURCES += \
     ../src/ctpmdspi.cpp \
     ../src/ctptdspi.cpp \
     ../src/ctpif_data.cpp \
-    ../src/ctpif.cpp
+    ../src/ctpif.cpp \
+    ../src/ctpif_data_fio.cpp
 
 
 HEADERS +=\
@@ -24,7 +25,8 @@ HEADERS +=\
     ../include/ctptdspi.h \
     ../include/ctpif_global.h \
     ../include/ctpif_data.h \
-    ../include/ctpif.h
+    ../include/ctpif.h \
+    ../include/ctpif_data_fio.h
 
 INCLUDEPATH += ../include
 
