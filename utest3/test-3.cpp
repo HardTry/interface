@@ -328,7 +328,7 @@ TEST(dataset, ctp_interface) {
     EXPECT_NE(data, nullptr);
     EXPECT_EQ(info->di.maxsize, 39196);
 
-    /*auto writer = new CtpDataWriter(param);
+    auto writer = new CtpDataWriter(param);
     EXPECT_NE(writer, nullptr);
 
     auto saver = new CtpDataReader(param);
@@ -342,7 +342,7 @@ TEST(dataset, ctp_interface) {
     thread_write.join();
 
     SafeDeletePtr(saver);
-    SafeDeletePtr(writer);*/
+    SafeDeletePtr(writer);
 
     SafeDeletePtr(info);
     SafeDeleteAry(data);

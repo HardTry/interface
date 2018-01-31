@@ -5,18 +5,32 @@
 #include "str.h"
 #include "utility.h"
 #include <locale>
+#include <thread>
 
+
+// check memory leak
+#ifdef _WINDOWS
+#ifdef _DEBUG_
+#ifndef DBG_NEW
+#define DBG_NEW new (_NORMAL_BLOCK, __FILE__, __LINE__)
+#define new DBG_NEW
+#endif
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+#include <stdlib.h>
+#endif // _DEBUG_
+#endif //_WINDOWS
 
 CtpMdSpi::CtpMdSpi(GmdParam *param) : ctp_(0), iRequestID(-1), datacb_(0), gmd_param_(param) {
 }
 
 CtpMdSpi::~CtpMdSpi() {
-  if (ctp_) {
-    ctp_->Release();
-    //wait for ctp_mdapi exit
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-    ctp_ = 0;
-  }
+    if (ctp_) {
+        ctp_->Release();
+        //wait for ctp_mdapi exit
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+        ctp_ = 0;
+    }
 }
 
 void CtpMdSpi::OnFrontConnected() {
@@ -42,17 +56,14 @@ void CtpMdSpi::OnRspUserLogin(CThostFtdcRspUserLoginField *pRspUserLogin,
                               bool bIsLast) {
   ctp_status_.status = CTPMD_STATUS_USER_LOGIN;
   mylog(gmd_param_->gmdlog, L_INFO, "response: user login");
-  if (pRspUserLogin != nullptr && pRspInfo != nullptr) {
-    strcpy_s(trade_day_, MAX_PATH, pRspUserLogin->TradingDay);
-    ofstream out;
-    getLogfile(out, gmd_param_->gmdlog);
-    out << *pRspUserLogin << *pRspInfo << " request id " << nRequestID << " last "
-        << bIsLast;
-    if (pRspInfo->ErrorID)
-      processError(pRspInfo->ErrorID);
-    else
-      ctp_status_.data = 0, ctp_status_.status = CTPMD_STATUS_USER_LOGIN;
-  }
+  ofstream out;
+  getLogfile(out, gmd_param_->gmdlog);
+  out << *pRspUserLogin << *pRspInfo << " request id " << nRequestID << " last "
+      << bIsLast;
+  if (pRspInfo->ErrorID)
+    processError(pRspInfo->ErrorID);
+  else
+    ctp_status_.data = 0, ctp_status_.status = CTPMD_STATUS_USER_LOGIN;
   return;
 }
 void CtpMdSpi::OnRspUserLogout(CThostFtdcUserLogoutField *pUserLogout,
@@ -126,7 +137,7 @@ void CtpMdSpi::OnRspUnSubForQuoteRsp(
   processError(pRspInfo->ErrorID);
 }
 
-void CtpMdSpi::OnRtnDepthMarketData (
+void CtpMdSpi::OnRtnDepthMarketData(
     CThostFtdcDepthMarketDataField *pDepthMarketData) {
   ctp_status_.status = CTPMD_STATUS_DEPTH_MD;
   // mylog(gmd_param_->gmdlog, L_INFO, "OnRtnDepthMarketData");

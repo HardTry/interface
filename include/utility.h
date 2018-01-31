@@ -1,13 +1,10 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
-#include "utility_global.h"
 #include "def.h"
 #include "mderr.h"
 #include "str.h"
 #include "mylog.h"
-#include "mem.h"
-#include "dataset.h"
 
 
 /**
@@ -25,7 +22,7 @@ time_t UTILITY_API make_the_time(char *TradeDate, char *TradeTime);
  * @return the time in time_t
  */
 time_t UTILITY_API make_the_time(char *TradeDate, uint32_t TradeTime);
-double UTILITY_API make_the_time(char* ActionDay, char *uptime, int32_t millisec);
+
 /**
  * @brief make_the_time converte 'yyyymmdd' and 'hh:mm:ss' to time_t
  * @param TradeDate the date
@@ -83,32 +80,7 @@ const UTILITY_API std::string getInstContinuedCode(std::string instrument);
  */
 extern UTILITY_API time_t get_exit_time(const char *the_time);
 
-extern UTILITY_API int get_days_in_month(const struct tm *ttm);
 
 extern UTILITY_API int compare_files(const char* file1, const char* file2);
-
-
-
-
-template<typename K, typename T>
-void clear_map(std::map<K, T*>& m) {
-  for (auto& p : m) {
-    if (p.second)
-        delete (p.second);
-  }
-  m.clear();
-}
-
-template<typename T>
-void clear_vector(std::vector<T*>& v) {
-  for (auto&p : v) {
-    if (p)
-      delete p;
-  }
-  v.clear();
-}
-
-extern UTILITY_API std::vector<std::string> split(const string& input, const string& regex);
-
 
 #endif // UTILITY_H

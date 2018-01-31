@@ -34,8 +34,6 @@ int main(int argc, char *argv[])
     printf("config filepath: the path of config file\n"
            "loop interval: the time interval of wrting-loop\n"
            "data filepath: the path of tickdata file\n\n");
-    // datasimu /app/sean/bin/gom/conf/gmd-simnow.json 10 /data/sean/tick/ru1701-20161118.tick 1000000
-    // datasimu /app/sean/bin/gom/conf/gmd-9-lyj.json 10 /app/sean/data/tick/rb1801-20171103.tick 1000000
     return 0;
   }
 
@@ -46,19 +44,18 @@ int main(int argc, char *argv[])
     cout << "init ctp md if error " << endl;
   }
 
-
   std::chrono::milliseconds loop_interval = std::chrono::milliseconds(atoi(argv[2]));
 
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // ! remove all history data
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  // char command[MAX_PATH];
-  // snprintf(command, MAX_PATH, "rm -f %s/*", param->data_store_path);
-  // // cout << command << endl;
-  // system(command);
-  // snprintf(command, MAX_PATH, "rm -f %s/*", param->data_rtpath);
-  // // cout << command << endl;
-  // system(command);
+  char command[MAX_PATH];
+  snprintf(command, MAX_PATH, "rm -f %s/*", param->data_store_path);
+  // cout << command << endl;
+  system(command);
+  snprintf(command, MAX_PATH, "rm -f %s/*", param->data_rtpath);
+  // cout << command << endl;
+  system(command);
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // ! remove all history data
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -69,11 +66,10 @@ int main(int argc, char *argv[])
   if (ret) return ret;
 
 
-  // auto writer = new CtpDataWriter(param);
+  auto writer = new CtpDataWriter(param);
   // auto saver = new CtpDataSaver(param);
-  auto writer = new CtpCandleWriter(param);
 
-  std::thread thread_write(test_write_candle_thread, writer, data, info, atoi(argv[4]), loop_interval);
+  std::thread thread_write(test_write_thread, writer, data, info, atoi(argv[4]), loop_interval);
   // std::thread thread_read(test_read_thread, saver);
 
   // thread_read.join();
@@ -89,3 +85,4 @@ int main(int argc, char *argv[])
 
   return (0);
 }
+

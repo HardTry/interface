@@ -1,0 +1,14 @@
+CppArgs[]=|-c;-x;c++;-std=c++14;-EPQt5;-EPQt5Core;-EPQt5Gui;-EPQt5PrintSupport;-EPQt5Widgets;
+CppArgs[cfg:Debug]+|-O0;-g3;
+CppArgs[cfg:Release]+|-O2 -Wall;
+CppArgs[plat:Linux]+|-isystem;/usr/local/gcc62/include/c++/6.2.0;-isystem;/usr/local/gcc62/include/c++/6.2.0/x86_64-redhat-linux;-isystem;/usr/local/gcc62/include/c++/6.2.0/backward;-isystem;/usr/local/include;-isystem;/usr/lib/clang/3.9.0/include;-isystem;/usr/include;
+CppCompilerPath[]=|/usr/local/gcc62/bin/g++
+CppLibPath[]=|ar
+ExeDebuggerPath|/usr/bin/gdb
+JavaAnalyzerPath[cfg:Analysis]=|oovJavaParser
+JavaCompilerPath[]=|javac
+JavaCompilerPath[cfg:Analysis]=|java
+JavaJarPath[]=|jar
+JavaJdkPath[]=|/usr/lib/jvm/java;
+ObjSymbolPath[]=|nm
+SourceRootDir|/work/sean/projects/md/Analyst/

@@ -8,7 +8,6 @@
 
 #include "ctpif_data.h"
 #include "ctpif.h"
-#include "ctpif_py.h"
 
 #include "mem.h"
 
@@ -364,13 +363,4 @@ int main(int argc, char **argv) {
   //   listeners.Append(new LeakChecker);
   // }
   return RUN_ALL_TESTS();
-}
-
-
-TEST(test_python, register_and_run) {
-  DATAPTR reader = cc_init_reader("/app/sean/bin/gom/conf/gmd-simnow.json");
-  int64_t datalen = cc_get_maxlen(reader);
-  double* dfptr = cc_get_dfptr(reader, "ru1701");
-  //dfptr = cast(dfptr, POINTER(c_double))
-  cc_destroy_reader(reader);
 }

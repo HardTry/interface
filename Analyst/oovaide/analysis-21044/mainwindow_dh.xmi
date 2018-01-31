@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XMI xmi.version="1.2" xmlns:UML="http://schema.omg.org/spec/UML/1.3" >
+ <XMI.content>
+  <Module id="1" module="/work/sean/projects/md/Analyst/mainwindow.h" codeLines="45" commentLines="50" moduleLines="109" >
+  </Module>
+  <Class id="228" name="MainWindow" module="1" line="66">
+  <Attr name="staticMetaObject" type="1357" const="f" ref="f" access="+" />
+  <Attr name="chartWidget" type="2603" const="f" ref="t" access="-" />
+  <Attr name="chartPloter" type="656" const="f" ref="t" access="-" />
+  <Attr name="InstrumentList" type="1275" const="f" ref="t" access="-" />
+  <Attr name="somethingList" type="1275" const="f" ref="t" access="-" />
+  <Attr name="gridLayout" type="1000" const="f" ref="t" access="-" />
+  <Attr name="vScrollBar" type="1927" const="f" ref="t" access="-" />
+  <Attr name="hScrollBar" type="1927" const="f" ref="t" access="-" />
+  <Attr name="viewMenu" type="1339" const="f" ref="t" access="-" />
+  <Oper name="metaObject" access="+" const="f" virt="f" line="68" ret="1357" retconst="t" retref="t">
+  </Oper>
+  <Oper name="qt_metacast" access="+" const="f" virt="f" line="68" ret="4200" retconst="f" retref="t">
+   <Parms list="@3372@t@t" />
+  </Oper>
+  <Oper name="qt_metacall" access="+" const="f" virt="f" line="68" ret="3471" retconst="f" retref="f">
+   <Parms list="@1358@f@f#@3471@f@f#@4200@f@t" />
+  </Oper>
+  <Oper name="tr" access="+" const="f" virt="f" line="68" ret="2082" retconst="f" retref="f">
+   <Parms list="s@3372@t@t#c@3372@t@t#n@3471@f@f" />
+   <Statements list="c=tr@1357"/>
+  </Oper>
+  <Oper name="trUtf8" access="+" const="f" virt="f" line="68" ret="2082" retconst="f" retref="f">
+   <Parms list="s@3372@t@t#c@3372@t@t#n@3471@f@f" />
+   <Statements list="c=tr@1357"/>
+  </Oper>
+  <Oper name="qt_static_metacall" access="-" const="f" virt="f" line="68" ret="4200" retconst="f" retref="f">
+   <Parms list="@1566@f@t#@1358@f@f#@3471@f@f#@4200@f@t" />
+  </Oper>
+  <Oper name="MainWindow" access="+" const="f" virt="f" line="71" ret="4200" retconst="f" retref="f">
+  </Oper>
+  <Oper name="newLetter" access="-" const="f" virt="f" line="74" ret="4200" retconst="f" retref="f">
+  </Oper>
+  <Oper name="save" access="-" const="f" virt="f" line="75" ret="4200" retconst="f" retref="f">
+  </Oper>
+  <Oper name="print" access="-" const="f" virt="f" line="76" ret="4200" retconst="f" retref="f">
+  </Oper>
+  <Oper name="undo" access="-" const="f" virt="f" line="77" ret="4200" retconst="f" retref="f">
+  </Oper>
+  <Oper name="about" access="-" const="f" virt="f" line="78" ret="4200" retconst="f" retref="f">
+  </Oper>
+  <Oper name="drawChart" access="-" const="f" virt="f" line="79" ret="4200" retconst="f" retref="f">
+   <Parms list="instrument@2082@t@t" />
+  </Oper>
+  <Oper name="addSomething" access="-" const="f" virt="f" line="80" ret="4200" retconst="f" retref="f">
+   <Parms list="something@2082@t@t" />
+  </Oper>
+  <Oper name="resizeEvent" access="#" const="f" virt="t" line="83" ret="4200" retconst="f" retref="f">
+   <Parms list="event@1891@f@t" />
+  </Oper>
+  <Oper name="horzScrollBarChanged" access="-" const="f" virt="f" line="86" ret="4200" retconst="f" retref="f">
+   <Parms list="value@3471@f@f" />
+  </Oper>
+  <Oper name="vertScrollBarChanged" access="-" const="f" virt="f" line="87" ret="4200" retconst="f" retref="f">
+   <Parms list="value@3471@f@f" />
+  </Oper>
+  <Oper name="xAxisChanged" access="-" const="f" virt="f" line="88" ret="4200" retconst="f" retref="f">
+   <Parms list="range@3471@f@f" />
+  </Oper>
+  <Oper name="yAxisChanged" access="-" const="f" virt="f" line="89" ret="4200" retconst="f" retref="f">
+   <Parms list="range@3471@f@f" />
+  </Oper>
+  <Oper name="createActions" access="-" const="f" virt="f" line="93" ret="4200" retconst="f" retref="f">
+  </Oper>
+  <Oper name="createStatusBar" access="-" const="f" virt="f" line="94" ret="4200" retconst="f" retref="f">
+  </Oper>
+  <Oper name="createDockWindows" access="-" const="f" virt="f" line="95" ret="4200" retconst="f" retref="f">
+  </Oper>
+  </Class>
+  <Class id="377" name="QAction" module="1" line="58">
+  <Attr name="staticMetaObject" type="1357" const="f" ref="f" access="+" />
+  </Class>
+  <Class id="656" name="QCustomPlot" line="3560">
+  </Class>
+  <Class id="853" name="QFrame" module="1" line="62">
+  <Attr name="staticMetaObject" type="1357" const="f" ref="f" access="+" />
+  </Class>
+  <Class id="1000" name="QGridLayout" line="49">
+  </Class>
+  <Class id="1275" name="QListWidget" module="1" line="59">
+  <Attr name="staticMetaObject" type="1357" const="f" ref="f" access="+" />
+  </Class>
+  <Class id="1292" name="QMainWindow" line="49">
+  </Class>
+  <Class id="1339" name="QMenu" module="1" line="60">
+  <Attr name="staticMetaObject" type="1357" const="f" ref="f" access="+" />
+  </Class>
+  <Class id="1357" name="QMetaObject" line="58">
+  </Class>
+  <DataType id="1358" name="QMetaObject::Call" />
+  <Class id="1566" name="QObject" line="45">
+  </Class>
+  <Class id="1891" name="QResizeEvent" line="62">
+  </Class>
+  <Class id="1927" name="QScrollBar" line="48">
+  </Class>
+  <Class id="2082" name="QString" line="49">
+  </Class>
+  <Class id="2265" name="QTextEdit" module="1" line="61">
+  <Attr name="staticMetaObject" type="1357" const="f" ref="f" access="+" />
+  </Class>
+  <Class id="2603" name="QWidget" line="44">
+  </Class>
+  <DataType id="3372" name="char" />
+  <DataType id="3471" name="int" />
+  <DataType id="4200" name="void" />
+  <Genrl id="100000" child="228" parent="1292" access="+" />
+ </XMI.content>
+</XMI>

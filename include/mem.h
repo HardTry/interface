@@ -26,7 +26,7 @@ typedef std::map<std::string, DATAPTR> MapStr2Ptr;
 typedef std::pair<std::string, DATAPTR> PairStrPtr;
 
 
-typedef int (*convert_2_simple_tick) (DATAPTR dest, DATAPTR src);
+typedef void (*convert_2_simple_tick) (DATAPTR, DATAPTR);
 typedef int (*write_data_file) (DATAPTR, int len);
 
 #ifdef _WINDOWS
@@ -215,7 +215,7 @@ public:
 };
 
 
-/*
+
 template <typename T, typename TInfo>
 class DataSetMemory {
 public:
@@ -270,10 +270,11 @@ private:
   SharedMemory* mem_ = nullptr;
   DataSet<T, TInfo>* data_set_ = nullptr;
   char name_[DATA_NAME_LENGTH];
-}; */
+};
 
 /*! \class DataInterfaceWriter
   \brief store the ctp raw datad and CTPMD raw data
+
   the struct of memory block are
   +---------------------------------------------+
   | Tick Raw Data Buffer 1                      |
@@ -321,14 +322,6 @@ typedef struct InterfaceBufferInfo {
 template <typename TRawData, typename TRawDataInfo, typename TData, typename TDataInfo>
 class DataInterfaceMemory {
 public:
-    DataInterfaceMemory() {}
-
-  void init(std::vector<std::string>& instrument, bool writeble = true, bool has_simple_tick = true) {
-    instrument_ = instrument;
-    ibi_.writeble_ = writeble;
-    ibi_.has_simple_tick_ = has_simple_tick;
-  }
-
   DataInterfaceMemory(std::vector<std::string>& instrument, bool writeble = true, bool has_simple_tick = true)
       : instrument_(instrument) {
       ibi_.writeble_ = writeble;
@@ -399,17 +392,17 @@ public:
     return 0;
   }
 
-  DATASET(TRawData) * getRawDatabuf(int64_t index) {
+  DATASET(TRawData) * geTRawDatabuf(int64_t index) {
     if (index >= 0 && index < ibi_.tick_buf_num_ && raw_data_set_)
       return raw_data_set_[index];
     return nullptr;
   }
 
-  TSDATAFRAME(TData) * getData(std::string instrument) {
+  TSDATAFRAME(TData) * geTData(std::string instrument) {
     return reinterpret_cast<TSDATAFRAME(TData) *>(maps2p_[instrument]);
   }
 
-  TSDATAFRAME(TData) * getData(int64_t index) {
+  TSDATAFRAME(TData) * geTData(int64_t index) {
     if (index >= 0 && index < instrument_.size() && simple_data_df_)
       return simple_data_df_[index];
     return nullptr;
@@ -428,11 +421,9 @@ public:
       TSDATAFRAME(TData) *df_simple_tick =
           reinterpret_cast<TSDATAFRAME(TData) *>(maps2p_[data->InstrumentID]);
       if (df_simple_tick && converter_) {
-          if (0 == converter_(&simple_tick, data)) {
-            // std::cout << "simple " << typeid(simple_tick).name() <<  ", " << simple_tick << std::endl;
-            ret = df_simple_tick->append(&simple_tick);
-            if (!ret) ++ibiptr_->amounTData_;
-          }
+          converter_(&simple_tick, data);
+          ret = df_simple_tick->append(&simple_tick);
+          if (!ret) ++ibiptr_->amounTData_;
       } else {
         printf("did not find %s\n", data->InstrumentID);
         ret = -2;
@@ -462,15 +453,9 @@ public:
     return ret;
   }
 
-  size_t getRawDataAmount() { return ibi_.amounTRawData_; }
-  size_t getDataAmount() { return ibi_.amounTData_; }
-  size_t getDataSize() { return simple_data_df_[0]->maxsize;}
-  double* get_dfptr(const char* inst) {
-      return  ((TSDATAFRAME(TData)*)(maps2p_[inst]))->get_dfptr();
-  }
-  void* get_bufptr(const char* inst) {
-     return  ((TSDATAFRAME(TData)*)(maps2p_[inst]))->get_bufptr();
-  }
+  size_t geTRawDataAmount() { return ibi_.amounTRawData_; }
+  size_t geTDataAmount() { return ibi_.amounTData_; }
+
 
 private:
 
@@ -525,21 +510,7 @@ private:
   }
 
 public:
-  void set_converter(convert_2_simple_tick converter) {converter_ = converter;}
-  void set_isnew(is_new_data_cb isnew) {
-    isnew_ = isnew;
-    for (size_t i = 0; i < instrument_.size(); ++i)
-      simple_data_df_[i]->set_isnew_cb(isnew);
-  }
-  void set_merge(merge_data_cb merge) {
-    merge_ = merge;
-    for (size_t i = 0; i < instrument_.size(); ++i)
-      simple_data_df_[i]->set_merge(merge);
-  }
-  void set_columns(std::vector<std::string>& cols) {
-    for (size_t i = 0; i < instrument_.size(); ++i)
-      simple_data_df_[i]->set_columns(cols);
-  }
+  void set_converter(convert_2_simple_tick converter) { converter_ = converter; }
 
 protected:
   InterfaceBufferInfo* ibiptr_ = nullptr;
@@ -551,12 +522,9 @@ protected:
 private:
   InterfaceBufferInfo ibi_;
   convert_2_simple_tick  converter_ = nullptr;
-  is_new_data_cb isnew_ = nullptr;
-  merge_data_cb merge_ = nullptr;
-
   SharedMemory* shared_mem_ = 0;
 
-  std::vector<std::string> instrument_;
+  std::vector<std::string>& instrument_;
 };
 
 

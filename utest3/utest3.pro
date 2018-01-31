@@ -4,8 +4,6 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 INCLUDEPATH += ../include
-INCLUDEPATH += $$PWD/../../eureka/include/docs
-
 
 
 SOURCES += test-3.cpp
@@ -20,7 +18,7 @@ unix {
 
     LIBS += -lpthread -lrt
     LIBS += -L/usr/local/lib -lgtest -lgtest_main
-    LIBS += -L/usr/local/py2714/lib -lpython2.7
+    LIBS += -lpython2.7
 
     target.path = /usr/local/bin/gmd
     INSTALLS += target

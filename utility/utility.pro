@@ -13,19 +13,14 @@ DEFINES += UTILITY_LIBRARY
 SOURCES += \
     ../src/utility.cpp \
     ../src/mylog.c \
-    ../src/str.c \
-    ../src/mem.cpp \
-    ../src/dataset.cpp
+    ../src/str.c
 
 HEADERS += \
     ../include/utility.h\
-    ../include/mem.h \
     ../include/mderr.h \
     ../include/mylog.h \
     ../include/str.h \
-    ../include/utility.h \
     ../include/utility_global.h \
-    ../include/dataset.h \
     ../include/def.h
 
 INCLUDEPATH += ../include
@@ -43,7 +38,7 @@ unix {
     INCLUDEPATH += /usr/local/include
 
     # don't forget linke thost..so to libthost...so
-    LIBS += -lrt -lpthread
+    LIBS += -lrt -lpthread -luv
 
     CONFIG(debug, debug|release) {
         DEFINES += _DEBUG_

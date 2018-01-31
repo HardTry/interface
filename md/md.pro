@@ -6,7 +6,6 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 INCLUDEPATH +=  ../include
-INCLUDEPATH += $$PWD/../../eureka/include/docs
 
 SOURCES += main.cpp
 

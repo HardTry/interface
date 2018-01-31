@@ -9,16 +9,13 @@ CONFIG += c++14
 TEMPLATE = lib
 
 DEFINES += CTPIF_LIBRARY
-DEFINES += PYTHON_INTERFACE
 
 SOURCES += \
     ../src/ctpifio.cpp \
     ../src/ctpmdspi.cpp \
     ../src/ctptdspi.cpp \
     ../src/ctpif_data.cpp \
-    ../src/ctpif.cpp \
-    ../src/ctpif_data_fio.cpp \
-    ../src/ctpif_py.cpp
+    ../src/ctpif.cpp
 
 
 HEADERS +=\
@@ -27,13 +24,9 @@ HEADERS +=\
     ../include/ctptdspi.h \
     ../include/ctpif_global.h \
     ../include/ctpif_data.h \
-    ../include/ctpif.h \
-    ../include/ctpif_data_fio.h \
-    ../include/ctpif_py.h
+    ../include/ctpif.h
 
 INCLUDEPATH += ../include
-INCLUDEPATH += $$PWD/../../eureka/include/docs
-
 
 ###################### unix ############################
 unix {
@@ -45,13 +38,9 @@ unix {
     message("Building for unix")
     INCLUDEPATH += $$PWD/../ctp-api/20160606_tradeapi_linux64
     INCLUDEPATH += /usr/local/include
-    INCLUDEPATH += /usr/local/py2714/include/python2.7
-
 
     # don't forget linke thost..so to libthost...so
     LIBS += -lthostmduserapi -lthosttraderapi -lrt -lpthread
-    LIBS += -L/usr/local/py2714/lib -lpython2.7
-    LIBS += -L/usr/local/lib -lboost_python
 
     CONFIG(debug, debug|release) {
         DEFINES += _DEBUG_
@@ -97,5 +86,4 @@ DEPENDPATH += $$PWD/../include
 DISTFILES += \
     package.sh \
     install.sh \
-    pydi.py \
-    candle_reader.py
+    pydi.py

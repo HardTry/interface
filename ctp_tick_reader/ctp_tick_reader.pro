@@ -7,7 +7,7 @@ SOURCES += main.cpp
 
 
 INCLUDEPATH += ../include
-INCLUDEPATH += $$PWD/../../eureka/include/docs
+INCLUDEPATH += $$PWD/../../nrlib/include
 INCLUDEPATH += $$PWD/../ctp-api/20160606_tradeapi_linux64
 INCLUDEPATH += /usr/local/include
 

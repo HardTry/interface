@@ -56,22 +56,6 @@ time_t make_the_time(char *TradeDate, uint32_t TradeTime) {
   return mktime(&lt);
 }
 
-double make_the_time(char *ActionDay, char* uptime, int32_t millisec) {
-  uint32_t llt = atoi(ActionDay);
-  struct tm lt;
-  memset(&lt, 0, sizeof(lt));
-
-  lt.tm_year = (int)(llt / 10000) - 1900;
-  lt.tm_mon = (int)(llt - (lt.tm_year + 1900) * 10000) / 100 - 1;
-  lt.tm_mday = (int)(llt - (lt.tm_year + 1900) * 10000 - (lt.tm_mon + 1) * 100);
-
-  //21:51:18 500
-  lt.tm_hour = atoi(uptime);
-  lt.tm_min = atoi(uptime + 3);
-  lt.tm_sec = atoi(uptime + 6);
-  return (double)(mktime(&lt)) + (double)millisec / 1000.0;
-}
-
 time_t make_the_time(uint32_t TradeDate, uint32_t TradeTime) {
   uint32_t llt = TradeDate;
   struct tm lt;
@@ -193,6 +177,37 @@ time_t get_exit_time(const char *the_time) {
 }
 
 
+
+#define is_next_day(n, o)                                                      \
+  ((n.tm_yday > o.tm_yday) || (n.tm_mon > o.tm_mon) || (n.tm_year > o.tm_year))
+
+int get_days_in_month(const struct tm *ttm) {
+  switch (ttm->tm_mon + 1) {
+  case 1:
+  case 3:
+  case 5:
+  case 7:
+  case 8:
+  case 10:
+  case 12:
+    return 31;
+  case 4:
+  case 6:
+  case 9:
+  case 11:
+    return 30;
+  case 2: {
+    int Y = ttm->tm_year + 1900;
+    if (!(Y % 100)) {
+      return (!(Y % 400)) ? 29 : 28;
+    } else {
+      return (!(Y % 4)) ? 29 : 28;
+    }
+  }
+  }
+  return 0;
+}
+
 int compare_files(const char* file1, const char* file2) {
   FILE* fp1 = fopen(file1, "rb");
   if (!fp1)
@@ -234,13 +249,4 @@ int compare_files(const char* file1, const char* file2) {
   fclose(fp2);
   fclose(fp1);
   return ret;
-}
-
-std::vector<std::string> split(const string& input, const string& regex) {
-    // passing -1 as the submatch index parameter performs splitting
-    std::regex re(regex);
-    std::sregex_token_iterator
-        first{input.begin(), input.end(), re, -1},
-        last;
-    return {first, last};
 }

@@ -1,12 +1,23 @@
 #include "ctpif.h"
 #include <cmath>
 #include <cfloat>
-#include <ctime>
-#include "utility.h"
 
 #include "rapidjson/document.h"
 using namespace rapidjson;
 
+
+// check memory leak
+#ifdef _WINDOWS
+#ifdef _DEBUG_
+#ifndef DBG_NEW
+#define DBG_NEW new (_NORMAL_BLOCK, __FILE__, __LINE__)
+#define new DBG_NEW
+#endif
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+#include <stdlib.h>
+#endif // _DEBUG_
+#endif //_WINDOWS
 
 static int read_instruments_json(string &filepath, CtpInstruments &instrument) {
   ifstream in(filepath);
@@ -325,104 +336,43 @@ void convert_ctpmd_2_ctpmd(DATAPTR d1, DATAPTR d2) {
   // memcpy(&mmd->Volume, &data->Volume, sizeof(mmd->Volume));
 }
 
-
-int ctp_2_candle(DATAPTR bar_ptr, DATAPTR ctpdata_ptr) {
-  auto bar = (NR::CandleBar*)bar_ptr;
-  auto ctpdata = (CtpMarketData*) ctpdata_ptr;
-
-  // time_t tt = make_the_time(ctpdata->ActionDay, ctpdata->UpdateTime);
-  time_t t = time(0);
-  struct tm lt;
-  localtime_s(&lt, &t);
-
-  //21:51:18 500
-  lt.tm_hour = atoi(ctpdata->UpdateTime);
-  lt.tm_min = atoi(ctpdata->UpdateTime + 3);
-  lt.tm_sec = atoi(ctpdata->UpdateTime + 6);
-
-  time_t tt = mktime(&lt);
-
-  if (abs(tt - t) > 10000) {
-    uint32_t date = atoi(ctpdata->TradingDay);
-    lt.tm_year = (int)(date / 10000) - 1900;
-    lt.tm_mon = (int)(date - (lt.tm_year + 1900) * 10000) / 100 - 1;
-    lt.tm_mday = (int)(date - (lt.tm_year + 1900) * 10000 - (lt.tm_mon + 1) * 100);
-  }
-
-
-  // must adjust the clock of server
-  if (abs(tt - t) > 600) {
-    printf("Is not trading time %s, %s-%s.%d > %ld > %ld > %ld\n",
-           ctpdata->InstrumentID, ctpdata->TradingDay, ctpdata->UpdateTime, ctpdata->UpdateMillisec,
-           tt, t, abs(tt - t));
-    fflush(stdout);
+int tb_2_ctpmmd(const char *tbcsv, const char *mmdfile) {
+  FILE *fpIn = 0, *fpOut = 0;
+  if (fopen_s(&fpIn, tbcsv, "r"))
     return -1;
+  if (fopen_s(&fpOut, mmdfile, "wb"))
+    return -2;
+
+  char buf[1024];
+  CTPMMD mmd;
+  char date[32];
+  char time[32];
+  int ignore1, ignore2;
+  int amount = 0;
+
+  while (fgets(buf, 1024, fpIn)) {
+    if ((*buf == 0) || (*buf == '#') || (*buf == '\r') || (*buf == '\n'))
+      continue;
+    sscanf(buf, "%[^,],0.%[^,],%d,%d,%d,%d,%d,%lf,%lf,%lf,%lf", date, time,
+           &ignore1, &mmd.Volume, &ignore2, &mmd.AskVolume1, &mmd.BidVolume1,
+           &mmd.LastPrice, &mmd.AskPrice1, &mmd.BidPrice1, &mmd.OpenInterest);
+
+    uint32_t t = atoi(time) * (strlen(time) == 6 ? 1000 : 100);
+    mmd.UpdateTime = make_the_time(date, t / 1000);
+    mmd.UpdateMillisec = t % 1000;
+
+    if (1 != fwrite(&mmd, sizeof(mmd), 1, fpOut)) {
+      printf("write ctpmmd error\n");
+      amount = -3;
+      break;
+    }
+    ++amount;
   }
 
-  bar->High = bar->Low = bar->Close = bar->Open = ctpdata->LastPrice;
-  bar->Volume = ctpdata->AskVolume1 + ctpdata->BidVolume1;
-  bar->key = (double)tt + (double)(ctpdata->UpdateMillisec) / 1000;
-  bar->openInterest = ctpdata->OpenInterest;
-  // printf("ActionDay %s, UpdateTime %s, time is %d, %.02lf\n", ctpdata->ActionDay, ctpdata->UpdateTime, bar->key);
-  // {
-  //   time_t t = (time_t)(bar->key);
-  //   localtime_s(&lt, &t);
-  //   uint32_t date = (lt.tm_year + 1900) * 10000 + (lt.tm_mon + 1) * 100 + lt.tm_mday;
-  //   uint32_t dtime = lt.tm_hour * 10000 + lt.tm_min * 100 + lt.tm_sec;
-  //   printf("candle %u %06u\n", date, dtime);
-  // }
-  return 0;
-}
+  fclose(fpOut);
+  fclose(fpIn);
 
-bool its_new_candle_data(int64_t pos, DATAPTR old, DATAPTR bar_data) {
-  if (pos < 0) return false;
-
-  auto bar = (NR::CandleBar*)bar_data;
-  auto bo = (NR::CandleBar*)old;
-#ifdef _DEBUG_
-  if (bo->key - bar->key > 3600)
-      bar->key += 24 * 60 * 60;
-#endif //_DEBUG_
-
-  int64_t itt = ((int64_t)(bar->key) / 10) * 10;
-  // printf("%.02f - %.02f = %.02f, itt %ld, its new %d\n",
-  //       bar->key, bo->key, bar->key - bo->key, itt,  (itt - (int)(bo->key) >= 10));
-  if (bar->key - bo->key < 0) {
-    struct tm lt;
-    time_t t = (time_t)bo->key;
-    localtime_s(&lt, &t);
-    printf("old time: %04d/%02d/%02d %02d:%02d:%02d -> ",
-           lt.tm_year + 1900, lt.tm_mon + 1, lt.tm_mday,
-           lt.tm_hour, lt.tm_min, lt.tm_sec);
-    t = (time_t)bar->key;
-    localtime_s(&lt, &t);
-    printf("New time: %04d/%02d/%02d %02d:%02d:%02d\n",
-           lt.tm_year + 1900, lt.tm_mon + 1, lt.tm_mday,
-           lt.tm_hour, lt.tm_min, lt.tm_sec);
-  }
-  return (itt - (int)(bo->key) >= 10);
-  // time_t tt = (time_t)((int)(bar->key));
-  // struct tm lt;
-  // localtime_s(&lt, &tt);
-  // return (0 == lt.tm_sec % 10);
-}
-
-void merge_candle_data(DATAPTR bar_old, DATAPTR bar_new) {
-  auto bn = (NR::CandleBar*)bar_new;
-  auto bo = (NR::CandleBar*)bar_old;
-  if (bo->key > 0) {
-    bo->Close = bn->Close;
-    bo->High = std::max(bn->High, bo->High);
-    bo->Low = std::min(bn->Low, bo->Low);
-    bo->Volume += bn->Volume;
-    if ((int64_t)(bo->key) % 10)
-        bo->key = (int)((int64_t)(bo->key) / 10) * 10;
-  } else {
-    bo->High = bo->Low = bo->Close = bo->Open = bn->Open;
-    bo->Volume = bn->Volume;
-    bo->key = (int64_t)(((int64_t)bn->key) / 10) * 10;
-  }
-  bo->openInterest = bn->openInterest;
+  return amount;
 }
 
 
@@ -535,5 +485,205 @@ int sample_tick_data(const char *tick_csv, const char *mdfile, const char* csvfi
 
 
   return 0;
+}
+
+/*
+"name": "ctp - 1",
+"brokerid": "9999",
+"clientid": "068576",
+"password": "simnow",
+"udp": false,
+"tduri": "tcp://180.168.146.187:10000"
+*/
+static int parse_speed_param(std::vector<CtpSpeedParam*>& param, rapidjson::Value& ifdoc) {
+    int ret = 0;
+    for (SizeType i = 0; i < ifdoc.Size(); ++i) {
+        rapidjson::Value& v = ifdoc[i];
+        CtpSpeedParam* p = new CtpSpeedParam();
+
+        if (v.HasMember("name")) {
+            p->name = v["name"].GetString();
+        } else
+            ret = -10;
+
+        if (!ret) {
+            if (v.HasMember("brokerid")) {
+                p->brokerid = v["brokerid"].GetString();
+            } else
+                ret = -11;
+        }
+
+        if (!ret) {
+            if (v.HasMember("clientid")) {
+                p->clientid = v["clientid"].GetString();
+            } else
+                ret = -12;
+        }
+
+        if (!ret) {
+            if (v.HasMember("password")) {
+                p->password = v["password"].GetString();
+            } else
+                ret = -13;
+        }
+
+        if (!ret) {
+            if (v.HasMember("udp")) {
+                p->udp = v["udp"].GetBool();
+            } else
+                ret = -14;
+        }
+
+        if (!ret) {
+            if (v.HasMember("tduri")) {
+                p->uri = v["tduri"].GetString();
+            } else
+                ret = -15;
+        }
+
+        if (!ret)
+            param.push_back(p);
+        else
+            delete p;
+    }
+
+    return ret;
+}
+
+
+/*
+"name": "ShangHai",
+"instrument": "rb1801",
+"price": 10,
+"dir": 1
+*/
+static int parse_test_case(std::vector<SpeedTestCase*>& cases, rapidjson::Value& ifdoc) {
+    int ret = 0;
+    for (SizeType i = 0; i < ifdoc.Size(); ++i) {
+        rapidjson::Value& v = ifdoc[i];
+        SpeedTestCase* p = new SpeedTestCase();
+
+        if (v.HasMember("name")) {
+            p->name = v["name"].GetString();
+        } else {
+            ret = -21;
+        }
+
+        if (!ret) {
+            if (v.HasMember("instrument")) {
+                p->instrument = v["instrument"].GetString();
+            } else {
+                ret = -22;
+            }
+        }
+
+        if (!ret) {
+            if (v.HasMember("price")) {
+                p->price = v["price"].GetDouble();
+            } else {
+                ret = -23;
+            }
+        }
+
+        if (!ret) {
+            if (v.HasMember("dir")) {
+                p->dir = v["dir"].GetInt();
+            } else {
+                ret = -23;
+            }
+        }
+
+        if (!ret) {
+            if (v.HasMember("volume")) {
+                p->volume = v["volume"].GetInt();
+            } else {
+                ret = -24;
+            }
+        }
+
+        if (!ret)
+            cases.push_back(p);
+        else
+            delete p;
+    }
+    return ret;
+}
+
+CtpSpeedTest* initSpeedParameter(const char *filepath) {
+  if (!filepath)
+    return nullptr;   //MDERR_CTP_CONFIG_FILE_ISNULL;
+
+  ifstream in(filepath);
+  if (in.eof())
+    return nullptr;   //MDERR_CTP_CONFIG_FILE_EMPTY;
+
+  char buffer[MAX_JSON_FILE_SIZE] = "";
+  in.read(buffer, MAX_JSON_FILE_SIZE);
+  rapidjson::StringStream ss(buffer);
+  rapidjson::Document jsondoc;
+  jsondoc.ParseStream(ss);
+
+  if (jsondoc.HasParseError()) {
+    cout << "config path is " << filepath << endl;
+    cout << "JSON Error at " << jsondoc.GetErrorOffset() << endl;
+    cout << buffer + jsondoc.GetErrorOffset() << endl;
+    return nullptr;   //MDERR_CTP_CONFIG_PARSE_ERROR;
+  }
+
+  CtpSpeedTest* param = new CtpSpeedTest();
+  int result = SUCCESSED;
+  if (jsondoc.HasMember("logpath"))
+      param->logpath = jsondoc["logpath"].GetString();
+  else
+      result = -1;
+
+  if (jsondoc.HasMember("interval"))
+      param->interval = jsondoc["interval"].GetInt();
+  else
+      result = -5;
+
+  if (jsondoc.HasMember("loop_times"))
+      param->loop_times = jsondoc["loop_times"].GetInt();
+  else
+      result = -6;
+
+  if (!result) {
+      if (jsondoc.HasMember("interface")) {
+          if (jsondoc["interface"].IsArray())
+              result = parse_speed_param(param->params, jsondoc["interface"]);
+          else
+              result = -3;
+
+          if (!result) {
+              if (jsondoc["test_case"].IsArray())
+                  result = parse_test_case(param->cases, jsondoc["test_case"]);
+              else
+                  result = -4;
+          }
+      } else {
+        result = -2;
+      }
+  }
+
+  if (result != SUCCESSED) {
+    SafeDeletePtr(param);
+    return nullptr;
+  }
+  return param;
+}
+
+void releaseSpeedParameter(CtpSpeedTest* param) {
+  if (param) {
+    for(auto& p : param->params)
+        if (p)
+            delete p;
+    for(auto& p : param->cases)
+        if (p)
+            delete p;
+    param->params.clear();
+    param->cases.clear();
+
+    delete param;
+  }
 }
 

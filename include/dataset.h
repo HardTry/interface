@@ -18,9 +18,8 @@
 #include <time.h>
 #include <vector>
 
-typedef bool (*got_new_data_cb)(DATAPTR dataobj, int64_t pos, bool isnew);
-typedef bool (*is_new_data_cb)(int64_t pos, DATAPTR d1, DATAPTR d2);
-typedef void (*merge_data_cb)(DATAPTR d1, DATAPTR d2);
+typedef int (*got_new_data_callback)(DATAPTR dataset, DATAPTR data, int64_t pos);
+
 
 typedef struct DataInfo {
   size_t cbsize = 0;
@@ -29,7 +28,6 @@ typedef struct DataInfo {
   int64_t index = 0;  /// index of something
   int64_t pos = -1;    /// the amount number of data, start at -1
   bool isworking = true; /// indicate this buffer is working for now
-  int64_t count = 0;     /// the cout >= pos + 1, for candle data, the pos will plus one when a new candle generated
   DATAPTR data = nullptr;
 
   DataInfo() {}
@@ -44,10 +42,123 @@ typedef struct DataInfo {
 
   void init(size_t cbs, size_t hs, size_t ms, DATAPTR ptr) {
     cbsize = (cbs), headsize = (hs), maxsize = (ms), index = (0), pos = (-1),
-    isworking = (true), count = (0), data = ptr;
+    isworking = (true), data = ptr;
   }
 
 } DataInfo;
+
+
+typedef struct KINDLE {
+  time_t UpdateTime;
+  PriceType open;
+  PriceType high;
+  PriceType low;
+  PriceType close;
+  uint32_t volume;
+  VolumeType interest;
+} KINDLE;
+
+enum CANDLE_PERIOD_TYPE {
+  CANDLE_PERIOD_TYPE_UNKNOW = 0,
+  CANDLE_PERIOD_TYPE_s10 = 10,
+  CANDLE_PERIOD_TYPE_s15 = 15,
+  CANDLE_PERIOD_TYPE_s30 = 30,
+  CANDLE_PERIOD_TYPE_m1 = 60,
+  CANDLE_PERIOD_TYPE_m5 = 300,
+  CANDLE_PERIOD_TYPE_m10 = 600,
+  CANDLE_PERIOD_TYPE_m15 = 900,
+  CANDLE_PERIOD_TYPE_m30 = 1800,
+  CANDLE_PERIOD_TYPE_h1 = 3600,
+  CANDLE_PERIOD_TYPE_h4 = 3600 * 4,
+  CANDLE_PERIOD_TYPE_D1 = 3600 * 24,
+  CANDLE_PERIOD_TYPE_W1 = 3600 * 24 * 5,
+  CANDLE_PERIOD_TYPE_M1 = 3600 * 24 * 30,
+  CANDLE_PERIOD_TYPE_Y1 = 3600 * 24 * 300,
+};
+
+typedef struct KindleData {
+  std::string instrument;
+  CANDLE_PERIOD_TYPE period;
+  size_t size;
+  size_t amount;
+  KINDLE *kindle;
+
+  KindleData()
+      : period(CANDLE_PERIOD_TYPE_UNKNOW), size(0), amount(0), kindle(0) {}
+  KindleData(std::string inst, CANDLE_PERIOD_TYPE period, size_t s)
+      : instrument(inst), period(period), size(s), amount(0) {
+    if (s)
+      kindle = new KINDLE[s];
+    else
+      kindle = nullptr;
+  }
+
+  ~KindleData() {
+    if (kindle)
+      SafeDeleteAry(kindle);
+  }
+} KindleData;
+
+typedef struct KindleSerial {
+  std::string instrument;
+  CANDLE_PERIOD_TYPE period;
+  size_t size;
+  size_t amount;
+  KindleData *kindle;
+
+  PriceType *open;
+  PriceType *high;
+  PriceType *low;
+  PriceType *close;
+  uint32_t *vol;
+  VolumeType *interest;
+
+  KindleSerial()
+      : period(CANDLE_PERIOD_TYPE_UNKNOW), size(0), amount(0), kindle(0),
+        open(0), high(0), close(0), vol(0), interest(0) {}
+  KindleSerial(KindleData *kindleptr) {
+    if (!kindleptr)
+      period = (CANDLE_PERIOD_TYPE_UNKNOW), size = (0), amount = (0),
+      kindle = (0), open = (0), high = (0), close = (0), vol = (0),
+      interest = (0);
+    else {
+      instrument = kindleptr->instrument, period = kindleptr->period,
+      size = kindleptr->size, amount = kindleptr->amount, kindle = kindleptr;
+      open = reinterpret_cast<PriceType *>(
+          new char[(sizeof(PriceType) * 4 + sizeof(VolumeType) +
+                    sizeof(VolumeType)) *
+                   size]);
+      high = open + size;
+      low = open + size;
+      close = low + size;
+      vol = reinterpret_cast<uint32_t *>(close + size);
+      interest = reinterpret_cast<VolumeType *>(vol + size);
+    }
+  }
+  ~KindleSerial() {
+    if (open) {
+      delete[] reinterpret_cast<char *>(open);
+      open = 0;
+    }
+  }
+} KindleSerial;
+
+typedef struct KindlePtr {
+  CANDLE_PERIOD_TYPE period;
+  KINDLE *ptr;
+  size_t maxlen;
+  size_t len;
+  size_t olen;
+  size_t offset;
+} KindlePtr;
+
+typedef struct KindleMemIndex {
+  uint32_t index;     /// index in instrument array in json config
+  size_t offset;      /// fisrt position of all data
+  KindlePtr kptr[10]; /// m1, m5, m10, m15, m30, h1, h4, d1, w1, M1
+} KindleMemIndex;
+
+
 
 //
 // Data Set
@@ -63,13 +174,9 @@ public:
   T *data = nullptr;
   bool myown_memory_ = false;
   char mode_ = 'w'; ///'r' or 'w'
+  got_new_data_callback newdata_cb = 0;
   int64_t sleep_interval = 0;
-  got_new_data_cb newdata_cb_ = nullptr;
-  is_new_data_cb is_new_ = nullptr;
-  merge_data_cb merge_ = nullptr;
 
-
-public:
   DataSet() {}
   virtual ~DataSet() { free_data_set(); }
 
@@ -82,6 +189,19 @@ public:
     init(data_size, mode, own_memory, tinfo);
   }
 
+  ///return the position of data, if have now new data then return -1
+  int got_new_data() {
+    if (info->di.pos >= nrow - 1) {
+      if (newdata_cb && data) {
+       for (int64_t i = nrow; i <= info->di.pos; ++i)
+         newdata_cb(this, data + i, i);
+      }
+      nrow = info->di.pos + 1;
+      return info->di.pos;
+    }
+    return -1;
+  }
+
   void init(int64_t max_size, char mode, bool own_memory, TInfo *tinfo) {
     mode_ = mode;
     myown_memory_ = own_memory;
@@ -89,7 +209,7 @@ public:
     if (mode_ == 'w') {
       free_data_set();
       cbsize = sizeof(T), maxsize = (max_size), nrow = (0), infosize = sizeof(TInfo);
-      sleep_interval = (0), newdata_cb_ = nullptr, is_new_ = nullptr;
+      newdata_cb = (0), sleep_interval = (0);
 
       if (myown_memory_) {
         info = reinterpret_cast<TInfo *>(new char[cbsize * max_size + infosize]);
@@ -100,15 +220,13 @@ public:
       }
     } else {
       cbsize = sizeof(T), maxsize = (max_size), nrow = (0), infosize = sizeof(TInfo);
-      sleep_interval = (0), info = nullptr, data = nullptr;
-      newdata_cb_ = nullptr, is_new_ = nullptr;
+      newdata_cb = (0), sleep_interval = (0), info = nullptr, data = nullptr;
     }
   }
 
 
   TInfo *getInfo() { return info; }
-  int64_t get_data_amount() { return info->di.count; }
-  int get_cur_pos() { return info->di.pos; }
+  int64_t get_data_amount() { return nrow; }
 
   void free_data_set() {
     if (myown_memory_) {
@@ -167,10 +285,6 @@ public:
     return data + row;
   }
 
-  DATAPTR get_bufptr() {
-    return (data);
-  }
-
   bool is_writble() { return mode_ == 'w'; }
 
   int append(const T *v) {
@@ -181,27 +295,8 @@ public:
     if (info->di.pos + 1 != (int64_t)nrow)
       return MDERR_MEMORY_WRITE_ERROR;
 
-    bool its_new = true;
-    if (is_new_ != nullptr)
-      its_new = is_new_(info->di.pos, data + info->di.pos, (T*) v);
-
-    if (its_new) {
-      nrow++;
-      info->di.pos++;
-      memcpy(data + info->di.pos, v, sizeof(T));
-    } else {
-      if (merge_) {
-        if (info->di.pos < 0) {
-          info->di.pos++, nrow++;
-        }
-        merge_(data + info->di.pos, (DATAPTR)(v));
-      }
-    }
-    info->di.count++;
-
-    if (newdata_cb_ != nullptr)
-      newdata_cb_(this, info->di.pos, its_new);
-
+    memcpy(data + nrow++, v, sizeof(T));
+    info->di.pos++;
     return 0;
   }
 
@@ -213,7 +308,7 @@ public:
 
   void is_working() { return info->di.isworking; }
 
-  void set_newdata_cb(got_new_data_cb cb) { newdata_cb_ = cb; }
+  void set_newdata_cb(got_new_data_callback cb) { newdata_cb = cb; }
 
   inline void start_data_reader(int sleep_interval);
 
@@ -262,7 +357,7 @@ public:
                DataSet<T, TInfo>::nrow = (0),
                DataSet<T, TInfo>::infosize = sizeof(TInfo);
 
-    DataSet<T, TInfo>::newdata_cb_ = (0), DataSet<T, TInfo>::sleep_interval = (0);
+    DataSet<T, TInfo>::newdata_cb = (0), DataSet<T, TInfo>::sleep_interval = (0);
 
     if (own_memory_ && mode_ == 'w') {
         DataSet<T, TInfo>::info = reinterpret_cast<TInfo *>(
@@ -353,10 +448,6 @@ public:
       return maps2dp[col_name];
   }
 
-  double* get_dfptr() {
-    return key;
-  }
-
   ftime_t *get_key() { return key; }
   double *get_col(size_t col) {
     if (col > ncol)
@@ -373,8 +464,8 @@ public:
   size_t get_row_amount() {return this->nrow;}
   size_t get_clo_amount() {return this->ncol;}
 
-  int get_row() { return DataSet<T, TInfo>::nrow; }
 
+  int get_row() { return DataSet<T, TInfo>::nrow; }
 
   int append(const T *v) {
     if (DataSet<T, TInfo>::mode_ != 'w')
@@ -386,34 +477,12 @@ public:
       return MDERR_MEMORY_WRITE_ERROR;
 
     // printf("Add a new data heheh\n");
+    memcpy(DataSet<T, TInfo>::data + DataSet<T, TInfo>::nrow, v, sizeof(T));
+    for (int64_t i = 0; i < ncol; i++)
+      *(series[i] + DataSet<T, TInfo>::nrow) = *((double *)v + i);
 
-    bool b_new_data = true;
-    if (isnew_ != nullptr)
-      b_new_data = isnew_(DataSet<T, TInfo>::info->di.pos,
-                          DataSet<T, TInfo>::data + DataSet<T, TInfo>::info->di.pos,
-                          (T*) v);
-    if (b_new_data) {
-      ++DataSet<T, TInfo>::nrow;
-      ++DataSet<T, TInfo>::info->di.pos;
-      memcpy(DataSet<T, TInfo>::data + DataSet<T, TInfo>::info->di.pos, v, sizeof(T));
-      for (int64_t i = 0; i < ncol; i++)
-        *(series[i] + DataSet<T, TInfo>::info->di.pos) = *((double *)(v) + i);
-    } else {
-      if (merge_) {
-        if (DataSet<T, TInfo>::info->di.pos < 0) {
-          DataSet<T, TInfo>::info->di.pos++, DataSet<T, TInfo>::nrow++;
-        }
-        merge_(DataSet<T, TInfo>::data + DataSet<T, TInfo>::info->di.pos, (DATAPTR)(v));
-      }
-      for (int64_t i = 0; i < ncol; i++)
-        *(series[i] + DataSet<T, TInfo>::info->di.pos)
-              = *((double *)(DataSet<T, TInfo>::data + DataSet<T, TInfo>::info->di.pos) + i);
-    }
-    ++DataSet<T, TInfo>::info->di.count;
-
-    if (new_data_cb_ != nullptr)
-      new_data_cb_(this, DataSet<T, TInfo>::info->di.pos, b_new_data);
-
+    ++DataSet<T, TInfo>::nrow;
+    ++DataSet<T, TInfo>::info->di.pos;
     return 0;
   }
 
@@ -443,15 +512,8 @@ public:
       return newset;
   }
 
-  void set_isnew_cb(is_new_data_cb isnew) { isnew_ = isnew; }
-  void set_got_new_data_cb(got_new_data_cb new_data_cb) { new_data_cb_ = new_data_cb; }
-  void set_merge(merge_data_cb merge) {merge_ = merge;}
-
 private:
   Col2DfPtr maps2dp;
-  is_new_data_cb isnew_ = nullptr;
-  got_new_data_cb new_data_cb_ = nullptr;
-  merge_data_cb merge_ = nullptr;
 };
 
 #define TSDATAFRAME(T) TsDataFrame<T, T##Info>
@@ -571,7 +633,6 @@ int load_data_from_file(const char* filepath, T** data, TInfo** info) {
     } else {
       (*info)->di.data = *data;
       (*info)->di.maxsize = size;
-      (*info)->di.count = (int64_t)size;
     }
 
     return ret;

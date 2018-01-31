@@ -1,0 +1,64 @@
+{
+  "logpath": ".\\mylog.txt",
+  "interval": 1000,
+  "loop_times": 5,
+
+  "interface": [
+    {
+      "name": "ctp 1",
+      "brokerid": "9999",
+      "clientid": "068576",
+      "password": "simnow",
+      "udp": false,
+      "tduri": "tcp://180.168.146.187:10000"
+    },
+    {
+      "name": "ctp 2",
+      "brokerid": "9999",
+      "clientid": "068576",
+      "password": "simnow",
+      "udp": false,
+      "tduri": "tcp://180.168.146.187:10000"
+    },
+    {
+      "name": "ctp 3",
+      "brokerid": "9999",
+      "clientid": "068576",
+      "password": "simnow",
+      "udp": false,
+      "tduri": "tcp://180.168.146.187:10000"
+    }
+  ],
+
+  "test_case": [
+
+    {
+      "name": "ZhengZhou",
+      "instrument": "CF801",
+      "price": 16485,
+      "dir": 1,
+      "volume": 1
+    },
+    {
+      "name": "DaLian",
+      "instrument": "j1801",
+      "price": 2536.5,
+      "dir": 1,
+      "volume": 4
+    },
+    {
+      "name": "ShangHai",
+      "instrument": "rb1801",
+      "price": 3811,
+      "dir": 0,
+      "volume": 10
+    },
+    {
+      "name": "Zhongjin",
+      "instrument": "IF1803",
+      "price": 3407.8,
+      "dir": 0,
+      "volume": 3
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+Comp-cppInc-<Root>|/work/sean/projects/md/Analyst/mainwindow.h;/work/sean/projects/md/Analyst/qcustomplot.h;
+Comp-cppSrc-<Root>|/work/sean/projects/md/Analyst/main.cpp;/work/sean/projects/md/Analyst/mainwindow.cpp;/work/sean/projects/md/Analyst/qcustomplot.cpp;
+Components|<Root>;

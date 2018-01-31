@@ -4,8 +4,6 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 INCLUDEPATH += ../include
-INCLUDEPATH += $$PWD/../../eureka/include/docs
-
 
 
 SOURCES += test-1.cpp
@@ -17,15 +15,10 @@ unix {
     message("Building for unix")
     INCLUDEPATH += ../ctp-api/20160606_tradeapi_linux64
     INCLUDEPATH += /usr/local/include
-    INCLUDEPATH += /usr/local/py2714/include/python2.7
-
-
-    # don't forget linke thost..so to libthost...so
-    LIBS += -L/usr/local/py2714/lib -lpython2.7
-    LIBS += -L/usr/local/lib -lboost_python
 
     LIBS += -lpthread -lthostmduserapi -lthosttraderapi -lrt
     LIBS += -L/usr/local/lib -lgtest -lgtest_main
+    # LIBS += -lpython2.7
 
     target.path = /usr/local/bin/gmd
     INSTALLS += target

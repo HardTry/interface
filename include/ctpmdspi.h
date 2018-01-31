@@ -24,7 +24,6 @@ public:
 
   void clear_mdapi() {ctp_ = nullptr;}
 
-  const char* get_trade_day() {return trade_day_; }
   // CThostFtdcMdSpi interface
 public:
   void OnFrontConnected();
@@ -74,9 +73,6 @@ private:
   int iRequestID;
   market_data_callback datacb_ = nullptr;
   CtpStatus ctp_status_ = {CTPMD_STATUS_NO_STATUS, 0};
-
-  char trade_day_[MAX_PATH];
-  bool started = false;
 public:
   GmdParam* gmd_param_ = nullptr;
 };

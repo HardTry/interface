@@ -6,8 +6,6 @@ CONFIG -= qt
 SOURCES += main.cpp
 
 INCLUDEPATH += ../include
-INCLUDEPATH += $$PWD/../../eureka/include/docs
-
 
 
 ###################### unix ############################

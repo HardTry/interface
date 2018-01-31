@@ -5,8 +5,6 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 INCLUDEPATH += ../include
-INCLUDEPATH += $$PWD/../../eureka/include/docs
-
 
 
 SOURCES += test_ctpmd_interface.cpp
@@ -23,7 +21,7 @@ unix {
 
     LIBS += -L/usr/local/lib -lgtest -lgtest_main
     # LIBS += -lthosttraderapi -lthostmduserapi
-    LIBS += -lpthread -lrt
+    LIBS += -lpthread -lrt -luv
     # LIBS += -lpython2.7 -lcpy1
 
     target.path = /usr/local/bin/gmd

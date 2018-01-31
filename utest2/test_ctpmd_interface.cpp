@@ -669,8 +669,6 @@ TEST(UdpDataTransfer, server_client) {
 }
 */
 
-/*
-
 #include "udp_server.h"
 
 void start_udp_server(UdpSrvReceiver* rev) {
@@ -697,4 +695,3 @@ TEST(uv_udp, server) {
   std::this_thread::sleep_for(std::chrono::seconds(3));
   delete rev;
 }
-*/

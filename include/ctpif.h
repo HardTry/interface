@@ -34,6 +34,8 @@ extern void CTPIF_API convert_ctpmd_2_ctpmd(DATAPTR d1, DATAPTR d2);
  * @param mmdfile the CTPMMD file
  * @return zero for good
  */
+extern CTPIF_API int tb_2_ctpmmd(const char *tbcsv, const char *mmdfile);
+
 extern CTPIF_API int sample_tick_data(const char *tick_csv,
                                         const char *mdfile, const char *csvfile,
                                         const int interval);
@@ -46,12 +48,13 @@ extern CTPIF_API CtpTradeSpi* get_ctp_tdif(GmdParam *param, const char *logpath)
 
 extern CTPIF_API void connect_to_ctp_mdif(CtpMdSpi* mdspi);
 
-extern CTPIF_API void output_inst_summary(ostream& out, const MapInstrument& map_inst);
 
 
-extern CTPIF_API int ctp_2_candle(DATAPTR bar_ptr, DATAPTR ctpdata_ptr);
-extern CTPIF_API bool its_new_candle_data(int64_t pos, DATAPTR old, DATAPTR bar_data);
-extern CTPIF_API void merge_candle_data(DATAPTR bar_old, DATAPTR bar_new);
+extern CTPIF_API CtpSpeedTest* initSpeedParameter(const char *filepath);
+/**
+ * @brief releaseCtpMdIf Release the Ctp Interface for market data
+ */
+extern CTPIF_API void releaseSpeedParameter(CtpSpeedTest* param);
 
 
 #endif // CTPIF_H

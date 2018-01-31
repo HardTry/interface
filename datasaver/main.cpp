@@ -32,21 +32,15 @@ int main(int argc, char *argv[])
     cout << "init ctp md if error " << endl;
   }
 
-  //1. auto saver = new CtpDataSaver(param);
+  auto saver = new CtpDataSaver(param);
+
   //std::thread thread_read(test_read_thread, saver);
-  //std::thread thread_read(test_save_thread, saver);
-
-  //3. auto saver = new CtpCandleReader(param);
-  //4. std::thread thread_read(test_read_candle_thread, saver);
-
-  auto saver = new CtpCandleSaver(param);
-  std::thread thread_read(test_save_candle_thread, saver);
+  std::thread thread_read(test_save_thread, saver);
   thread_read.join();
 
   SafeDeletePtr(saver);
   releaseConfig(param);
 
-  //cmp /app/sean/data/tick/ru1701-20161118.tick  /data/sean/tick/ru1701-20161118.tick
   return (0);
 }
 

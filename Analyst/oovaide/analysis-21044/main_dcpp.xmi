@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XMI xmi.version="1.2" xmlns:UML="http://schema.omg.org/spec/UML/1.3" >
+ <XMI.content>
+  <Module id="1" module="/work/sean/projects/md/Analyst/main.cpp" codeLines="24" commentLines="0" moduleLines="30" >
+  </Module>
+  <Class id="2" name="" line="0">
+  <Oper name="main" access="-" const="f" virt="f" line="7" ret="3471" retconst="f" retref="f">
+   <BodyVarDecl name="a" type="389" const="f" ref="f" />
+   <BodyVarDecl name="w" type="228" const="f" ref="f" />
+   <Statements list="{[ argc == 1 ]#}#{[ argc == 2 ]#}#{[else]#}#{[ ret ]#}#{[else]#c=QApplication+;8b44a920@389#{*[]#c=qInitResources_analyst@2#}#c=MainWindow@228#c=w.show@2603#c=exec@389#}"/>
+  </Oper>
+  </Class>
+  <Class id="228" name="MainWindow" line="66">
+  </Class>
+  <Class id="389" name="QApplication" line="42">
+  </Class>
+  <Class id="2603" name="QWidget" line="44">
+  </Class>
+  <DataType id="3471" name="int" />
+ </XMI.content>
+</XMI>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XMI xmi.version="1.2" xmlns:UML="http://schema.omg.org/spec/UML/1.3" >
+ <XMI.content>
+  <Module id="1" module="/work/sean/projects/md/Analyst/mainwindow.cpp" codeLines="239" commentLines="109" moduleLines="395" >
+  </Module>
+  <Class id="2" name="" line="0"/>
+  <Class id="9" name="(lambda at/work/sean/projects/md/Analyst/mainwindow.cpp:72:29)" line="0"/>
+  <Class id="10" name="(lambda at/work/sean/projects/md/Analyst/mainwindow.cpp:83:29)" line="0"/>
+  <Class id="11" name="(lambda at/work/sean/projects/md/Analyst/mainwindow.cpp:89:29)" line="0"/>
+  <Class id="231" name="MainWindow" line="66">
+  <Oper name="MainWindow" access="+" const="f" virt="f" line="61" ret="4314" retconst="f" retref="f">
+   <BodyVarDecl name="holder" type="2200" const="f" ref="f" />
+   <BodyVarDecl name="qstring_literal_temp" type="2189" const="f" ref="f" />
+   <BodyVarDecl name="sizePolicy" type="2124" const="f" ref="f" />
+   <BodyVarDecl name="holder" type="2200" const="f" ref="f" />
+   <BodyVarDecl name="qstring_literal_temp" type="2189" const="f" ref="f" />
+   <BodyVarDecl name="holder" type="2200" const="f" ref="f" />
+   <BodyVarDecl name="qstring_literal_temp" type="2189" const="f" ref="f" />
+   <Statements list="v=chartWidget@231@2711@t#c=QWidget+;ecc50550@2711#v=chartWidget@231@2711@f#c=QString+;6d7a328f@2189#c=chartWidget-&gt;setObjectName@1648#c=resize+;df64fefd@2711#v=chartPloter@231@660@t#v=chartWidget@231@2711@f#c=QCustomPlot@660#v=gridLayout@231@1078@t#v=chartWidget@231@2711@f#c=QGridLayout+;4de4c141@1078#v=gridLayout@231@1078@f#c=gridLayout-&gt;setSpacing@1078#v=gridLayout@231@1078@f#c=gridLayout-&gt;setContentsMargins+;75587368@1220#v=gridLayout@231@1078@f#c=QStringDataPtr@2200#c=QString+;5d8cb520@2189#c=operator()@9#c=gridLayout-&gt;setObjectName@1648#c=QSizePolicy+;f1d6444@2124#c=sizePolicy.setHorizontalStretch@2124#c=sizePolicy.setVerticalStretch@2124#v=vScrollBar@231@2034@t#v=chartWidget@231@2711@f#c=QScrollBar+;b38b39a1@2034#v=vScrollBar@231@2034@f#c=QStringDataPtr@2200#c=QString+;5d8cb520@2189#c=operator()@10#c=vScrollBar-&gt;setObjectName@1648#v=vScrollBar@231@2034@f#c=vScrollBar-&gt;setOrientation@321#v=gridLayout@231@1078@f#v=vScrollBar@231@2034@f#c=gridLayout-&gt;addWidget+;34c15917@1078#v=hScrollBar@231@2034@t#v=chartWidget@231@2711@f#c=QScrollBar+;b38b39a1@2034#v=hScrollBar@231@2034@f#c=QStringDataPtr@2200#c=QString+;5d8cb520@2189#c=operator()@11#c=hScrollBar-&gt;setObjectName@1648#v=hScrollBar@231@2034@f#c=hScrollBar-&gt;setOrientation@321#v=gridLayout@231@1078@f#v=hScrollBar@231@2034@f#c=gridLayout-&gt;addWidget+;34c15917@1078#v=chartWidget@231@2711@f#c=setCentralWidget@1372#c=createActions@231#c=createStatusBar@231#c=createDockWindows@231#c=tr@231#c=setWindowTitle@2711#v=xAxis@660@473@f#v=chartPloter@231@660@f#c=chartPloter-&gt;xAxis-&gt;setRange+;6e290bf6@473#v=yAxis@660@473@f#v=chartPloter@231@660@f#c=chartPloter-&gt;yAxis-&gt;setRange+;6e290bf6@473#c=newLetter@231#c=setUnifiedTitleAndToolBarOnMac@1372#v=hScrollBar@231@2034@f#c=hScrollBar-&gt;setRange@321#v=vScrollBar@231@2034@f#c=vScrollBar-&gt;setRange@321#v=hScrollBar@231@2034@f#c=qFlagLocation@2#c=qFlagLocation@2#c=connect+;722fbbde@1648#v=vScrollBar@231@2034@f#c=qFlagLocation@2#c=qFlagLocation@2#c=connect+;722fbbde@1648"/>
+  </Oper>
+  <Oper name="newLetter" access="-" const="f" virt="f" line="121" ret="4314" retconst="f" retref="f">
+   <BodyVarDecl name="start" type="674" const="f" ref="f" />
+   <Statements list="c=QDate+;55f934a0@671#c=QDateTime+;ac57b81a@674#c=start.setTimeSpec@674#c=start.toTime_t@674#c=time@2#c=qsrand@2#{*[ i &lt; n ;]#}#v=xAxis@660@473@f#v=chartPloter@231@660@f#v=yAxis@660@473@f#v=chartPloter@231@660@f#c=QCPFinancial@519#c=candlesticks-&gt;setChartStyle@519#c=candlesticks-&gt;setWidth@519#c=candlesticks-&gt;setTwoColored@519#c=QColor+;4915ce2e@603#c=QBrush+;3435af7d@438#c=candlesticks-&gt;setBrushPositive@519#c=QColor+;4915ce2e@603#c=QBrush+;3435af7d@438#c=candlesticks-&gt;setBrushNegative@519#c=QColor+;4915ce2e@603#c=QPen+;851ac207@1830#c=candlesticks-&gt;setPenPositive@519#c=QColor+;4915ce2e@603#c=QPen+;851ac207@1830#c=candlesticks-&gt;setPenNegative@519#v=chartPloter@231@660@f#c=QCPAxisRect+;e6ece0a0@482#v=chartPloter@231@660@f#c=chartPloter-&gt;plotLayout@660#c=chartPloter-&gt;plotLayout()-&gt;setRowSpacing@548#v=chartPloter@231@660@f#c=chartPloter-&gt;setAutoAddPlottableToLegend@660#c=volumeAxisRect-&gt;axis@482#c=volumeAxisRect-&gt;axis@482#c=QCPBars@494#c=volumeAxisRect-&gt;axis@482#c=volumeAxisRect-&gt;axis@482#c=QCPBars@494#{*[ i &lt; n / 5 ;]#c=qrand@2#c=qrand@2#c=qrand@2#}#c=volumePos-&gt;setWidth@494#c=volumeNeg-&gt;setWidth@494#c=volumeAxisRect-&gt;axis@482#c=volumeAxisRect-&gt;axis(QCPAxis::atBottom)-&gt;setTickLabelRotation@473#v=xAxis@660@473@f#v=chartPloter@231@660@f#c=QPen+;1f8ca739@1830#c=chartPloter-&gt;xAxis-&gt;setBasePen@473#v=xAxis@660@473@f#v=chartPloter@231@660@f#c=chartPloter-&gt;xAxis-&gt;setTickLabels@473#v=xAxis@660@473@f#v=chartPloter@231@660@f#c=chartPloter-&gt;xAxis-&gt;setTicks@473#v=chartPloter@231@660@f#c=chartPloter-&gt;rescaleAxes@660#v=chartPloter@231@660@f#c=QCPMarginGroup+;7103e6cb@556"/>
+  </Oper>
+  <Oper name="save" access="-" const="f" virt="f" line="240" ret="4314" retconst="f" retref="f">
+  </Oper>
+  <Oper name="print" access="-" const="f" virt="f" line="233" ret="4314" retconst="f" retref="f">
+  </Oper>
+  <Oper name="undo" access="-" const="f" virt="f" line="244" ret="4314" retconst="f" retref="f">
+  </Oper>
+  <Oper name="about" access="-" const="f" virt="f" line="255" ret="4314" retconst="f" retref="f">
+   <Statements list="c=tr@231#c=tr@231#c=about@1427"/>
+  </Oper>
+  <Oper name="drawChart" access="-" const="f" virt="f" line="248" ret="4314" retconst="f" retref="f">
+   <Parms list="instrument@2189@t@t" />
+  </Oper>
+  <Oper name="addSomething" access="-" const="f" virt="f" line="252" ret="4314" retconst="f" retref="f">
+   <Parms list="something@2189@t@t" />
+  </Oper>
+  <Oper name="resizeEvent" access="#" const="f" virt="t" line="358" ret="4314" retconst="f" retref="f">
+   <Parms list="event@1974@f@t" />
+   <Statements list="c=QWidget::resizeEvent@2711"/>
+  </Oper>
+  <Oper name="horzScrollBarChanged" access="-" const="f" virt="f" line="366" ret="4314" retconst="f" retref="f">
+   <Parms list="value@3583@f@f" />
+   <Statements list="{[]#v=chartPloter@231@660@f#c=chartPloter-&gt;replot@660#}"/>
+  </Oper>
+  <Oper name="vertScrollBarChanged" access="-" const="f" virt="f" line="376" ret="4314" retconst="f" retref="f">
+   <Parms list="value@3583@f@f" />
+   <Statements list="{[]#v=chartPloter@231@660@f#c=chartPloter-&gt;replot@660#}"/>
+  </Oper>
+  <Oper name="xAxisChanged" access="-" const="f" virt="f" line="385" ret="4314" retconst="f" retref="f">
+   <Parms list="range@3583@f@f" />
+  </Oper>
+  <Oper name="yAxisChanged" access="-" const="f" virt="f" line="391" ret="4314" retconst="f" retref="f">
+   <Parms list="range@3583@f@f" />
+  </Oper>
+  <Oper name="createActions" access="-" const="f" virt="f" line="263" ret="4314" retconst="f" retref="f">
+   <BodyVarDecl name="newIcon" type="1120" const="f" ref="f" />
+   <BodyVarDecl name="saveIcon" type="1120" const="f" ref="f" />
+   <BodyVarDecl name="printIcon" type="1120" const="f" ref="f" />
+   <BodyVarDecl name="undoIcon" type="1120" const="f" ref="f" />
+   <Statements list="c=menuBar@1372#c=tr@231#c=menuBar()-&gt;addMenu+;2fed30b0@1422#c=tr@231#c=addToolBar+;2b6b6d81@1372#c=QString+;6d7a328f@2189#c=QString+;6d7a328f@2189#c=QIcon+;4a37678b@1120#c=fromTheme@1120#c=tr@231#c=QAction+;e9a3c4ec@380#c=newLetterAct-&gt;setShortcuts+;6063cb54@380#c=tr@231#c=newLetterAct-&gt;setStatusTip@380#c=fileMenu-&gt;addAction@2711#c=fileToolBar-&gt;addAction@2711#c=QString+;6d7a328f@2189#c=QString+;6d7a328f@2189#c=QIcon+;4a37678b@1120#c=fromTheme@1120#c=tr@231#c=QAction+;e9a3c4ec@380#c=saveAct-&gt;setShortcuts+;6063cb54@380#c=tr@231#c=saveAct-&gt;setStatusTip@380#c=fileMenu-&gt;addAction@2711#c=fileToolBar-&gt;addAction@2711#c=QString+;6d7a328f@2189#c=QString+;6d7a328f@2189#c=QIcon+;4a37678b@1120#c=fromTheme@1120#c=tr@231#c=QAction+;e9a3c4ec@380#c=printAct-&gt;setShortcuts+;6063cb54@380#c=tr@231#c=printAct-&gt;setStatusTip@380#c=fileMenu-&gt;addAction@2711#c=fileToolBar-&gt;addAction@2711#c=fileMenu-&gt;addSeparator@1421#c=quitAct-&gt;setShortcuts+;6063cb54@380#c=tr@231#c=quitAct-&gt;setStatusTip@380#c=menuBar@1372#c=tr@231#c=menuBar()-&gt;addMenu+;2fed30b0@1422#c=tr@231#c=addToolBar+;2b6b6d81@1372#c=QString+;6d7a328f@2189#c=QString+;6d7a328f@2189#c=QIcon+;4a37678b@1120#c=fromTheme@1120#c=tr@231#c=QAction+;e9a3c4ec@380#c=undoAct-&gt;setShortcuts+;6063cb54@380#c=tr@231#c=undoAct-&gt;setStatusTip@380#c=editMenu-&gt;addAction@2711#c=editToolBar-&gt;addAction@2711#v=viewMenu@231@1421@t#c=menuBar@1372#c=tr@231#c=menuBar()-&gt;addMenu+;2fed30b0@1422#c=menuBar@1372#c=menuBar()-&gt;addSeparator@1422#c=menuBar@1372#c=tr@231#c=menuBar()-&gt;addMenu+;2fed30b0@1422#c=tr@231#c=aboutAct-&gt;setStatusTip@380#c=tr@231#c=aboutQtAct-&gt;setStatusTip@380"/>
+  </Oper>
+  <Oper name="createStatusBar" access="-" const="f" virt="f" line="327" ret="4314" retconst="f" retref="f">
+   <Statements list="c=statusBar@1372#c=tr@231#c=statusBar()-&gt;showMessage@2184"/>
+  </Oper>
+  <Oper name="createDockWindows" access="-" const="f" virt="f" line="331" ret="4314" retconst="f" retref="f">
+   <Statements list="c=tr@231#c=QDockWidget+;a46858ab@705#c=operator|@2#c=dock-&gt;setAllowedAreas@705#v=InstrumentList@231@1354@t#c=QListWidget+;f9f37cf9@1354#v=InstrumentList@231@1354@f#c=QStringList+;ff2e9be6@2201#c=QString+;6d7a328f@2189#c=operator&lt;&lt;+;15b4273f@2201#c=QString+;6d7a328f@2189#c=operator&lt;&lt;+;15b4273f@2201#c=QString+;6d7a328f@2189#c=operator&lt;&lt;+;15b4273f@2201#c=QString+;6d7a328f@2189#c=operator&lt;&lt;+;15b4273f@2201#c=QString+;6d7a328f@2189#c=operator&lt;&lt;+;15b4273f@2201#c=QString+;6d7a328f@2189#c=operator&lt;&lt;+;15b4273f@2201#c=InstrumentList-&gt;addItems@1354#v=InstrumentList@231@1354@f#c=dock-&gt;setWidget@705#c=addDockWidget+;7ec9a971@1372#v=viewMenu@231@1421@f#c=dock-&gt;toggleViewAction@705#c=viewMenu-&gt;addAction@2711#c=tr@231#c=QDockWidget+;a46858ab@705#v=somethingList@231@1354@t#c=QListWidget+;f9f37cf9@1354#v=somethingList@231@1354@f#c=dock-&gt;setWidget@705#c=addDockWidget+;7ec9a971@1372#v=viewMenu@231@1421@f#c=dock-&gt;toggleViewAction@705#c=viewMenu-&gt;addAction@2711"/>
+  </Oper>
+  </Class>
+  <Class id="321" name="QAbstractSlider" line="44">
+  </Class>
+  <Class id="380" name="QAction" line="58">
+  </Class>
+  <Class id="438" name="QBrush" line="48">
+  </Class>
+  <Class id="473" name="QCPAxis" line="1898">
+  </Class>
+  <Class id="482" name="QCPAxisRect" line="4557">
+  </Class>
+  <Class id="494" name="QCPBars" line="5446">
+  </Class>
+  <Class id="519" name="QCPFinancial" line="5836">
+  </Class>
+  <Class id="548" name="QCPLayoutGrid" line="1309">
+  </Class>
+  <Class id="556" name="QCPMarginGroup" line="1154">
+  </Class>
+  <Class id="603" name="QColor" line="45">
+  </Class>
+  <Class id="660" name="QCustomPlot" line="3560">
+  </Class>
+  <Class id="671" name="QDate" line="45">
+  </Class>
+  <Class id="674" name="QDateTime" line="47">
+  </Class>
+  <Class id="705" name="QDockWidget" line="45">
+  </Class>
+  <Class id="1078" name="QGridLayout" line="49">
+  </Class>
+  <Class id="1120" name="QIcon" line="48">
+  </Class>
+  <Class id="1220" name="QLayout" line="54">
+  </Class>
+  <Class id="1354" name="QListWidget" line="59">
+  </Class>
+  <Class id="1372" name="QMainWindow" line="49">
+  </Class>
+  <Class id="1421" name="QMenu" line="60">
+  </Class>
+  <Class id="1422" name="QMenuBar" line="49">
+  </Class>
+  <Class id="1427" name="QMessageBox" line="49">
+  </Class>
+  <Class id="1648" name="QObject" line="45">
+  </Class>
+  <Class id="1830" name="QPen" line="72">
+  </Class>
+  <Class id="1974" name="QResizeEvent" line="72">
+  </Class>
+  <Class id="2034" name="QScrollBar" line="48">
+  </Class>
+  <Class id="2124" name="QSizePolicy" line="47">
+  </Class>
+  <Class id="2184" name="QStatusBar" line="46">
+  </Class>
+  <Class id="2189" name="QString" line="49">
+  </Class>
+  <Class id="2200" name="QStringDataPtr" line="205">
+  </Class>
+  <Class id="2201" name="QStringList" line="45">
+  </Class>
+  <Class id="2711" name="QWidget" line="44">
+  </Class>
+  <DataType id="3583" name="int" />
+  <DataType id="4314" name="void" />
+ </XMI.content>
+</XMI>

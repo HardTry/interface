@@ -1,4 +1,4 @@
-export GCCH="/usr/local/gcc64"
+export GCCH="/usr/local/gcc63"
 export PATH="$GCCH/bin:$PATH"
 export LD_LIBRARY_PATH=$GCCH/lib:$GCCH/lib64:$GCCH/libexec:/usr/local/lib:/usr/lib
 export CC=$GCCH/bin/gcc
@@ -8,15 +8,15 @@ export CXXFLAGS="-O3 -Wall"
 
 
 
-here=/home/sean/pkg/md/md
-nrlib_path=/home/sean/pkg/build/nrlib/gcc/Release/nrlib
+here=/home/sean/projects/3p/md/md
+nrlib_path=/home/sean/projects/3p/build/nrlib/gcc/release/nrlib
 
 cd $nrlib_path
-make -j4
+make -j24
 make install
 
-cd ../../Debug/nrlib
-make -j4
+cd ../../debug/nrlib
+make -j24
 make install
 
 cd $here
