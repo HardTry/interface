@@ -1,0 +1,55 @@
+{
+  "data-interface": [
+    {
+      "name": "ctp",
+      "param": {
+        "ctpmd-logpath": "d:\\projects\\build\\md\\logs\\",
+        "brokerid": "9999",
+        "clientid": "068576",
+        "password": "simnow",
+        "udp": false,
+        "mduri": [
+           "tcp://180.168.146.187:10010",
+           "tcp://180.168.146.187:10011",
+           "tcp://218.202.237.33:10012"
+        ],
+        "tduri": [
+           "tcp://180.168.146.187:10000",
+           "tcp://180.168.146.187:10001",
+           "tcp://218.202.237.33:10002"
+        ]
+      }
+    }
+  ],
+  "instrument" : {
+    "file": "",
+    "list": [
+      "rb1701",
+      "j1701",
+      "i1701",
+      "CF701",
+      "SR701",
+      "ni1701",
+      "au1612",
+      "ag1612",
+      "ru1701",
+      "p1701",
+      "m1701",
+      "IF1611"
+    ]
+  },
+  "gmd-param": {
+    "max-tick-per-sec": 2,
+    "tick-buffer-num": 2,
+    "save-tickbuf-time": 15,
+    "max-time-long": 20,
+    "log-path": "d:\\projects\\build\\md\\logs\\gmd.log",
+    "tdlog-path": "d:\\projects\\build\\md\\logs\\gtd.log",
+    "data-store-path": "d:\\projects\\build\\md\\data\\store",
+    "tick-data-path": "d:\\projects\\build\\md\\data\\tick",
+    "data-realtime-path": "d:\\projects\\build\\md\\data\\rt",
+    "cal-store-path": "d:\\projects\\build\\md\\data\\cal",
+    "save-loop-interval": 10,
+    "exit-time": "16:00:00"
+  }
+}
