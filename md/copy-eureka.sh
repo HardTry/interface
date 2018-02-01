@@ -10,10 +10,10 @@ export CXXFLAGS="-O3 -Wall"
 
 target=/app/sean/bin/gom/bin
 binary=/usr/local/bin/gmd
-here=/home/sean/pkg/md/md
+here=/home/sean/projects/interface/md
 
-eureka_rls=/home/sean/pkg/build/eureka/gcc/Release
-eureka_dbg=/home/sean/pkg/build/eureka/gcc/Debug
+eureka_rls=/home/sean/projects/build/fnext/gcc/release
+eureka_dbg=/home/sean/projects/build/fnext/gcc/debug
 
 cd $eureka_rls
 make -j4
