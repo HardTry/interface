@@ -5,7 +5,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 INCLUDEPATH += ../include
-INCLUDEPATH += $$PWD/../../eureka/include/docs
+INCLUDEPATH += $$PWD/../../fnext/include/docs
 
 
 
@@ -38,7 +38,8 @@ unix {
     }
     CONFIG(release, debug|release) {
         TARGET = utest-2
-        LIBS += -lutility -lctpif
+        LIBS += -L$$OUT_PWD/../utility/ -lutility
+        LIBS += -L$$OUT_PWD/../ctpif/ -lctpif
         # LIBS += -L$$OUT_PWD/../utility/ -lutility
         # LIBS += -L$$OUT_PWD/../ctpif/ -lctpif
         message("Build for release version")

@@ -1,4 +1,4 @@
-export GCCH="/usr/local/gcc64"
+export GCCH="/usr/local/gcc730"
 export PATH="$GCCH/bin:$PATH"
 export LD_LIBRARY_PATH=$GCCH/lib:$GCCH/lib64:$GCCH/libexec:/usr/local/lib:/usr/lib
 export CC=$GCCH/bin/gcc
@@ -10,10 +10,10 @@ export CXXFLAGS="-O3 -Wall"
 
 target=/app/sean/bin/gom/bin
 binary=/usr/local/bin/gmd
-build_rls=/home/sean/pkg/build/md/gcc/Release
-build_dbg=/home/sean/pkg/build/md/gcc/Debug
+build_rls=/home/sean/projects/build/interface/gcc730/release
+build_dbg=/home/sean/projects/build/interface/gcc730/debug
 
-here=/home/sean/pkg/md/md
+here=/home/sean/projects/interface/md
 
 
 cd $build_rls

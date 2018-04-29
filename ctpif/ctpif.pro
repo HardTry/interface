@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT     -= core gui
-CONFIG += c++14
+QMAKE_CXXFLAGS += -std=c++17
 TEMPLATE = lib
 
 DEFINES += CTPIF_LIBRARY
@@ -32,7 +32,7 @@ HEADERS +=\
     ../include/ctpif_py.h
 
 INCLUDEPATH += ../include
-INCLUDEPATH += $$PWD/../../eureka/include/docs
+INCLUDEPATH += $$PWD/../../fnext/include/docs
 
 
 ###################### unix ############################
@@ -45,13 +45,13 @@ unix {
     message("Building for unix")
     INCLUDEPATH += $$PWD/../ctp-api/20160606_tradeapi_linux64
     INCLUDEPATH += /usr/local/include
-    INCLUDEPATH += /usr/local/py2714/include/python2.7
+    INCLUDEPATH += /app/bin/py2714-gcc730/include/python2.7
 
 
     # don't forget linke thost..so to libthost...so
     LIBS += -lthostmduserapi -lthosttraderapi -lrt -lpthread
-    LIBS += -L/usr/local/py2714/lib -lpython2.7
-    LIBS += -L/usr/local/lib -lboost_python
+    LIBS += -L/app/bin/py2714-gcc730/lib -lpython2.7
+    LIBS += -L/usr/local/lib -lboost_python27
 
     CONFIG(debug, debug|release) {
         DEFINES += _DEBUG_

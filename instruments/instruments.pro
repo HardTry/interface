@@ -11,7 +11,7 @@ HEADERS += instgeter.h
 
 
 INCLUDEPATH += ../include
-INCLUDEPATH += $$PWD/../../eureka/include/docs
+INCLUDEPATH += $$PWD/../../fnext/include/docs
 
 
 

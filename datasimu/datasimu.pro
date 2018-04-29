@@ -6,7 +6,7 @@ CONFIG -= qt
 SOURCES += main.cpp
 
 INCLUDEPATH += ../include
-INCLUDEPATH += $$PWD/../../eureka/include/docs
+INCLUDEPATH += $$PWD/../../fnext/include/docs
 
 
 

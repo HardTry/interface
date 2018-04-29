@@ -1,4 +1,4 @@
-export GCCH="/usr/local/gcc64"
+export GCCH="/usr/local/gcc730"
 export PATH="$GCCH/bin:$PATH"
 export LD_LIBRARY_PATH=$GCCH/lib:$GCCH/lib64:$GCCH/libexec:/usr/local/lib:/usr/lib
 export CC=$GCCH/bin/gcc
@@ -10,10 +10,10 @@ export CXXFLAGS="-O3 -Wall"
 
 target=/app/sean/bin/gom/bin
 binary=/usr/local/bin/gmd
-here=/home/sean/pkg/md/md
+here=/home/sean/projects/interface/md
 
-eureka_rls=/home/sean/pkg/build/eureka/gcc/Release
-eureka_dbg=/home/sean/pkg/build/eureka/gcc/Debug
+eureka_rls=/home/sean/projects/build/fnext/gcc730/release
+eureka_dbg=/home/sean/projects/build/fnext/gcc730/debug
 
 cd $eureka_rls
 make -j4

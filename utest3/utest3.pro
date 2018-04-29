@@ -4,7 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 INCLUDEPATH += ../include
-INCLUDEPATH += $$PWD/../../eureka/include/docs
+INCLUDEPATH += $$PWD/../../fnext/include/docs
 
 
 
@@ -20,7 +20,7 @@ unix {
 
     LIBS += -lpthread -lrt
     LIBS += -L/usr/local/lib -lgtest -lgtest_main
-    LIBS += -L/usr/local/py2714/lib -lpython2.7
+    LIBS += -L/app/bin/py2714-gcc730/lib -lpython2.7
 
     target.path = /usr/local/bin/gmd
     INSTALLS += target
